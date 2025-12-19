@@ -1,0 +1,22 @@
+{
+  "name": "ai_services",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "mammoth": "^1.11.0",
+    "pdf-parse": "^1.1.1",
+    "pdf-to-png-converter": "^3.11.0",
+    "tesseract.js": "^7.0.0",
+    "transformers": "^3.1.0"
+  }
+}
