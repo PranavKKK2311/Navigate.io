@@ -31,13 +31,13 @@ const generateRefreshToken = (payload) => {
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
-    
+
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
-    
+
     // Create new user in database
     const newUser = new User({
       name,
@@ -45,10 +45,10 @@ router.post('/register', async (req, res) => {
       password, // Will be hashed by pre-save hook in User model
       role: role || 'student'
     });
-    
+
     // Save user to database
     await newUser.save();
-    
+
     // Generate tokens
     const payload = {
       user: {
@@ -56,11 +56,11 @@ router.post('/register', async (req, res) => {
         role: newUser.role
       }
     };
-    
+
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
-    
-    res.json({ 
+
+    res.json({
       token: accessToken,
       refreshToken,
       user: {
@@ -71,8 +71,9 @@ router.post('/register', async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('Register error:', err);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Register error:', err.message);
+    console.error('Full error:', JSON.stringify(err, null, 2));
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
 
@@ -82,19 +83,19 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    
+
     // Find user in database
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-    
+
     // Check password using the method in User model
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-    
+
     // Generate tokens
     const payload = {
       user: {
@@ -102,11 +103,11 @@ router.post('/login', async (req, res) => {
         role: user.role
       }
     };
-    
+
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
-    
-    res.json({ 
+
+    res.json({
       token: accessToken,
       refreshToken,
       user: {
@@ -127,25 +128,25 @@ router.post('/login', async (req, res) => {
 // @access  Public
 router.post('/refresh-token', (req, res) => {
   const { refreshToken } = req.body;
-  
+
   // Check if refresh token exists
   if (!refreshToken) {
     return res.status(401).json({ message: 'Refresh token is required' });
   }
-  
+
   // Check if refresh token is valid
   if (!refreshTokens.has(refreshToken)) {
     return res.status(403).json({ message: 'Invalid refresh token' });
   }
-  
+
   try {
     // Verify refresh token
     const decoded = jwt.verify(refreshToken, REFRESH_TOKEN_SECRET);
-    
+
     // Generate new access token
     const payload = { user: decoded.user };
     const accessToken = generateAccessToken(payload);
-    
+
     res.json({ token: accessToken });
   } catch (err) {
     // Remove invalid refresh token
@@ -159,7 +160,7 @@ router.post('/refresh-token', (req, res) => {
 // @access  Public
 router.post('/logout', (req, res) => {
   const { refreshToken } = req.body;
-  
+
   // Remove refresh token
   refreshTokens.delete(refreshToken);
   res.json({ message: 'Logged out successfully' });
@@ -170,20 +171,20 @@ router.post('/logout', (req, res) => {
 // @access  Private
 router.get('/me', async (req, res) => {
   const token = req.header('x-auth-token');
-  
+
   if (!token) {
     return res.status(401).json({ message: 'No token, authorization denied' });
   }
-  
+
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    
+
     // Find user in database
     const user = await User.findById(decoded.user.id).select('-password');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
+
     res.json({
       user: {
         id: user._id,
