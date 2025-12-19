@@ -148,37 +148,67 @@ const LandingPage = () => {
               <Box
                 sx={{
                   position: 'relative',
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    inset: -20,
-                    borderRadius: '30%',
-                    background: 'linear-gradient(45deg, #EC4899, #06B6D4)',
-                    filter: 'blur(40px)',
-                    opacity: 0.5,
-                    zIndex: -1,
-                    animation: `${float} 5s ease-in-out infinite alternate`
-                  }
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minHeight: 350,
                 }}
               >
+                {/* Decorative gradient orbs */}
                 <Box
-                  component="img"
-                  src="/logo-new.png"
-                  alt="Navigate Platform"
                   sx={{
-                    width: '100%',
-                    maxWidth: 450,
-                    height: 'auto',
-                    display: 'block',
-                    mx: 'auto',
-                    filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.5))',
-                    transform: 'perspective(1000px) rotateY(-10deg)',
-                    transition: 'transform 0.5s ease',
-                    '&:hover': {
-                      transform: 'perspective(1000px) rotateY(0deg) scale(1.05)'
-                    }
+                    position: 'absolute',
+                    width: 300,
+                    height: 300,
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(236, 72, 153, 0.6) 0%, rgba(236, 72, 153, 0) 70%)',
+                    animation: `${float} 4s ease-in-out infinite`,
+                    top: '10%',
+                    right: '20%',
                   }}
                 />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    width: 250,
+                    height: 250,
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(6, 182, 212, 0.5) 0%, rgba(6, 182, 212, 0) 70%)',
+                    animation: `${float} 5s ease-in-out infinite reverse`,
+                    bottom: '15%',
+                    left: '15%',
+                  }}
+                />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    width: 200,
+                    height: 200,
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(168, 85, 247, 0) 70%)',
+                    animation: `${float} 6s ease-in-out infinite`,
+                    top: '40%',
+                    left: '30%',
+                  }}
+                />
+                {/* Logo text */}
+                <Typography
+                  variant="h1"
+                  sx={{
+                    fontSize: { xs: '4rem', md: '6rem' },
+                    fontWeight: 900,
+                    background: 'linear-gradient(135deg, #EC4899 0%, #06B6D4 50%, #A855F7 100%)',
+                    backgroundClip: 'text',
+                    textFillColor: 'transparent',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    textShadow: '0 0 80px rgba(236, 72, 153, 0.5)',
+                    letterSpacing: '-0.02em',
+                    zIndex: 1,
+                  }}
+                >
+                  N
+                </Typography>
               </Box>
             </Grid>
           </Grid>
